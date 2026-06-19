@@ -36,5 +36,5 @@ jobs:
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v4
         with:
-                name: CV
-                path: CV.pdf
+          name: CV
+          path: CV.pdf

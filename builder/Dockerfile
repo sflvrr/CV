@@ -1,40 +1,26 @@
-name: Generate CV PDF
+ARG BASE_OS=ubuntu:22.04
+FROM ${BASE_OS}
 
-on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Vienna
 
-jobs:
-  latex-build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-lang-cyrillic \
+    texlive-lang-english \
+    texlive-lang-german \
+    texlive-science \
+    lmodern \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-      - name: Determine Environment
-        id: env_selector
-        run: |
-          SELECTED_OS=$(python3 choose_system.py)
-          echo "BASE_IMAGE=$SELECTED_OS" >> $GITHUB_ENV
+WORKDIR /workspace
 
-      - name: Build Docker Image
-        run: |
-          docker build \
-            --build-arg BASE_OS=${{ env.BASE_IMAGE }} \
-            -t cv-compiler \
-            -f builder/Dockerfile .
+COPY src/ /workspace/src/
+COPY builder/compile.sh /usr/local/bin/compile.sh
+RUN chmod +x /usr/local/bin/compile.sh
 
-      - name: Compile Document
-        run: docker run --name latex-container cv-compiler
-
-      - name: Copy PDF from container
-        run: docker cp latex-container:/workspace/src/CV.pdf ./CV.pdf
-
-      - name: Upload PDF Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: CV
-          path: CV.pdf
+ENTRYPOINT ["/usr/local/bin/compile.sh"]
