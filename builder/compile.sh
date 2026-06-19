@@ -6,6 +6,4 @@ cd /workspace/src
 pdflatex -interaction=nonstopmode -halt-on-error CV.tex
 pdflatex -interaction=nonstopmode -halt-on-error CV.tex
 
-mv CV.pdf /workspace/CV.pdf
-
 rm -f *.aux *.log *.out *.toc *.fls *.fdb_latexmk
