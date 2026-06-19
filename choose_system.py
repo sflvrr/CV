@@ -1,5 +1,4 @@
 import hashlib
-import sys
 
 
 def get_base_image(seed_string):
@@ -7,9 +6,7 @@ def get_base_image(seed_string):
         "ubuntu:22.04",
         "ubuntu:20.04",
         "debian:bookworm-slim",
-        "debian:bullseye-slim",
-        "fedora:38",
-        "fedora:39"
+        "debian:bullseye-slim"
     ]
 
     hash_object = hashlib.sha3_256(seed_string.encode('utf-8'))
