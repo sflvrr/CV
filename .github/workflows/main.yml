@@ -1,0 +1,38 @@
+name: Generate CV PDF
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+jobs:
+  latex-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine Environment
+        id: env_selector
+        run: |
+          SELECTED_OS=$(python3 choose_system.py)
+          echo "BASE_IMAGE=$SELECTED_OS" >> $GITHUB_ENV
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            --build-arg BASE_OS=${{ env.BASE_IMAGE }} \
+            -t cv-compiler \
+            -f builder/Dockerfile .
+
+      - name: Compile Document
+        run: |
+          docker run --name latex-container -v ${{ github.workspace }}:/workspace cv-compiler
+
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Semyon_Khodus_CV
+          path: Semyon_Khodus_CV.pdf
