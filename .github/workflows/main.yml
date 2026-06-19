@@ -28,8 +28,10 @@ jobs:
             -f builder/Dockerfile .
 
       - name: Compile Document
-        run: |
-          docker run --name latex-container -v ${{ github.workspace }}:/workspace cv-compiler
+        run: docker run --name latex-container cv-compiler
+
+      - name: Copy PDF from container
+        run: docker cp latex-container:/workspace/Semyon_Khodus_CV.pdf ./Semyon_Khodus_CV.pdf
 
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v4

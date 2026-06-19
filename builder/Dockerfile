@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /workspace
 
+COPY src/ /workspace/src/
 COPY builder/compile.sh /usr/local/bin/compile.sh
 RUN chmod +x /usr/local/bin/compile.sh
 
