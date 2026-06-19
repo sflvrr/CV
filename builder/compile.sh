@@ -3,8 +3,8 @@ set -e
 
 cd /workspace/src
 
-pdflatex -interaction=nonstopmode -halt-on-error resume.tex
-pdflatex -interaction=nonstopmode -halt-on-error resume.tex
+pdflatex -interaction=nonstopmode -halt-on-error CV.tex
+pdflatex -interaction=nonstopmode -halt-on-error CV.tex
 
 mv resume.pdf /workspace/CV.pdf
 
